@@ -16,7 +16,7 @@ export default function NewsList() {
         <div
           className={`${
             n.id === selectedNews.id ? 'bg-red-100' : null
-          } flex items-center gap-10 mb-4 rounded-md p-4`}
+          } flex items-center gap-10 mb-4 rounded-md p-4 ease-in-out duration-100 cursor-pointer shadow-sm`}
           onClick={() => onSelectNews(n)}
         >
           <div>

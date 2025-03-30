@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNews } from '../hooks/useNews';
 import { useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,28 +16,49 @@ function NewsForm({ isOpen, setIsOpen }: Props) {
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
   } = useForm<News>();
 
-  const { dispatch } = useNews();
+  const { dispatch, state } = useNews();
+
+  const { selectedNews, isEditing } = state;
+
+  useEffect(() => {
+    if (isEditing && isOpen) {
+      setValue('url', selectedNews.url);
+      setValue('author', selectedNews.author);
+      setValue('title', selectedNews.title);
+      setValue('subtitle', selectedNews.subtitle);
+      setValue('description', selectedNews.description);
+    }
+  }, [isEditing, isOpen]);
 
   const onSubmit = (data: News) => {
-    const newData = { ...data, id: uuidv4() };
+    if (isEditing) {
+      //Edicion
+      const newData = { ...data, id: selectedNews.id };
 
-    dispatch({
-      type: 'add-news',
-      payload: { news: newData },
-    });
-
-    dispatch({
-      type: 'selected-news',
-      payload: { selectedNews: newData },
-    });
+      dispatch({
+        type: 'edit-news',
+        payload: { news: newData },
+      });
+    } else {
+      //Nuevo
+      const newData = { ...data, id: uuidv4() };
+      dispatch({
+        type: 'add-news',
+        payload: { news: newData },
+      });
+    }
 
     handleOpenModal();
     reset();
   };
 
-  const handleOpenModal = () => setIsOpen(!isOpen);
+  const handleOpenModal = () => {
+    reset();
+    setIsOpen(!isOpen);
+  };
 
   return (
     <Dialog open={isOpen} onClose={handleOpenModal} className="relative z-50">

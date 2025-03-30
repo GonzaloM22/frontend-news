@@ -15,7 +15,7 @@ function App() {
       <Header setIsOpen={setIsOpen} />
 
       {news.length ? (
-        <main className="grid grid-cols-[20%_70%] p-10 gap-12">
+        <main className="grid grid-cols-[20%_70%] px-10 pt-10 gap-12 over">
           <NewsList />
           <NewsDetail />
         </main>
