@@ -1,14 +1,8 @@
 import { useNews } from '../hooks/useNews';
 import { useForm } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-
-interface FormData {
-  url: string;
-  author: string;
-  title: string;
-  subtitle: string;
-  description: string;
-}
+import { News } from '../interfaces';
 
 interface Props {
   isOpen: boolean;
@@ -21,12 +15,26 @@ function NewsForm({ isOpen, setIsOpen }: Props) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<News>();
 
   const { dispatch } = useNews();
 
-  const onSubmit = (data: FormData) =>
-    dispatch({ type: 'add-news', payload: { news: data } });
+  const onSubmit = (data: News) => {
+    const newData = { ...data, id: uuidv4() };
+
+    dispatch({
+      type: 'add-news',
+      payload: { news: newData },
+    });
+
+    dispatch({
+      type: 'selected-news',
+      payload: { selectedNews: newData },
+    });
+
+    handleOpenModal();
+    reset();
+  };
 
   const handleOpenModal = () => setIsOpen(!isOpen);
 

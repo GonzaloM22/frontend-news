@@ -1,4 +1,4 @@
-import { useReducer, createContext, ActionDispatch, ReactNode } from 'react';
+import { useReducer, createContext, Dispatch, ReactNode } from 'react';
 import {
   NewsActions,
   NewsReducer,
@@ -8,7 +8,7 @@ import {
 
 type NewsContextProps = {
   state: NewsState;
-  dispatch: ActionDispatch<[action: NewsActions]>;
+  dispatch: Dispatch<NewsActions>;
 };
 
 type NewsProviderProps = {
