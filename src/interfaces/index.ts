@@ -1,8 +1,8 @@
 export interface News {
     id: string | null;
-    url: string;
+    image_url: string;
     author: string;
     title: string;
-    subtitle: string;
-    description: string;
+    date: string;
+    body: string;
   }

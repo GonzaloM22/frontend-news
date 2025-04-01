@@ -2,21 +2,31 @@ import { useNews } from '../hooks/useNews';
 
 export default function NewsDetail() {
   const { state } = useNews();
-
-  const { selectedNews } = state;
-
-  const { url, title, subtitle, description, author } = selectedNews;
+  const { selectedNews, news } = state;
+  const { image_url, title, date, body, author } = selectedNews;
 
   return (
-      <div>
-        <p className="text-red-700 font-semibold">{title}</p>
-        <p className="font-bold text-3xl">{subtitle}</p>
+    <>
+      {selectedNews.id && (
+        <div className="p-4 flex justify-center">
+          <div
+            className={`${
+              news.length ? 'shadow-md' : ''
+            } p-8 rounded-md space-y-2 max-w-xl w-full`}
+          >
+            <p className="text-red-700 font-semibold">{title}</p>
+            <p className="font-bold text-3xl">{date}</p>
 
-
-        <img className="object-cover h-96" src={url} alt={title} />
-        <p className="my-4">{author}</p>
-        <p className="my-4">{description}</p>
-      </div>
-
+            <img
+              className="object-cover h-96 w-full rounded-md"
+              src={image_url}
+              alt={title}
+            />
+            <p>{author}</p>
+            <p>{body}</p>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

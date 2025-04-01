@@ -5,29 +5,38 @@ export type NewsActions =
   | { type: 'selected-news'; payload: { selectedNews: News } }
   | { type: 'edit-news'; payload: { news: News } }
   | { type: 'delete-news'; payload: { id: string } }
-  | { type: 'isEditing'; payload: { isEditing: boolean } };
+  | { type: 'isEditing'; payload: { isEditing: boolean } }
+  | { type: 'add-initial-news'; payload: { initialNews: News[] } };
 
-export type NewsState = { news: News[]; selectedNews: News, isEditing: boolean };
+export type NewsState = {
+  news: News[];
+  selectedNews: News;
+  isEditing: boolean;
+};
 
 export const initialState: NewsState = {
   news: [],
   selectedNews: {
     id: null,
-    url: '',
+    image_url: '',
     title: '',
-    subtitle: '',
-    description: '',
+    date: '',
+    body: '',
     author: '',
   },
-  isEditing: false
+  isEditing: false,
 };
 
 export const NewsReducer = (state: NewsState, action: NewsActions) => {
   if (action.type === 'add-news') {
+    const isArray = Array.isArray(action.payload.news);
+
     return {
       ...state,
-      news: [...state.news, action.payload.news],
-      selectedNews: action.payload.news,
+      news: isArray
+        ? action.payload.news
+        : [...state.news, action.payload.news],
+      selectedNews: isArray ? action.payload.news[0] : action.payload.news,
     };
   }
 
@@ -45,7 +54,7 @@ export const NewsReducer = (state: NewsState, action: NewsActions) => {
         n.id === action.payload.news.id ? action.payload.news : n
       ),
       selectedNews: action.payload.news,
-      isEditing: false
+      isEditing: false,
     };
   }
 
@@ -73,7 +82,6 @@ export const NewsReducer = (state: NewsState, action: NewsActions) => {
       isEditing: action.payload.isEditing,
     };
   }
-
 
   return state;
 };
