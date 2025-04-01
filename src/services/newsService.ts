@@ -34,7 +34,19 @@ export async function getNews() {
   } catch (error) {
     console.log(error);
   }
-}
+} 
+
+export async function getNewsByAuthor(name: News['author']) {
+  try {
+    const url = `${import.meta.env.VITE_API_URL}/api/news/author/${name}`;
+    const { data: result } = await axios.get(url);
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+} 
+
 
 export async function deleteNews(id: News['id']) {
   try {
